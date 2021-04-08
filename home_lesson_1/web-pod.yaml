@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+  namespace: home-1
+  labels:
+spec:
+  initContainers:
+    - image: busybox
+      name: busybox
+  containers:
+  - name: simple-web
+    image: yeasy/simple-web:latest
+    volumeMounts:
+    - name: code
+      mountPath: /code
+  volumes:
+  - name: code
+    emptyDir: {}
+
