@@ -1,0 +1,19 @@
+openssl x509 -req -in mia.csr \
+-CA /home/oem/.minikube/ca.crt \
+-CAkey /home/oem/.minikube/ca.key \
+-CAcreateserial \
+-out mia.crt -days 365
+
+kubectl config set-credentials mia \
+--client-certificate=/home/oem/kubernetes/rbac_demo/mia.crt \
+--client-key=/home/oem/kubernetes/rbac_demo/mia.key
+
+# cluster тот что используется на сервере
+kubectl config set-context mia \
+--cluster=minikube --namespace=acg --user=mia
+
+# Переключения контекста для kubectl
+kubectl config use-context mia
+
+# Применение манифестов с использование другого контекста(Пользователя)
+kubectl apply -f role.yaml --context=minikube
